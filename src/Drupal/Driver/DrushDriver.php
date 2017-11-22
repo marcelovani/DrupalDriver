@@ -136,6 +136,10 @@ class DrushDriver extends BaseDriver {
     try {
       // Try for a drush 9 version.
       $version = unserialize($this->drush('version', [], ['format' => 'php']));
+      if (!is_array($version) || !isset($version['drush-version'])) {
+        // Some older beta of 9 perhaps?
+        return TRUE;
+      }
       return version_compare($version['drush-version'], '9', '<=');
     }
     catch (\RuntimeException $e) {
